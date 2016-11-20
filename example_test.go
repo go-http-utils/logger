@@ -7,7 +7,7 @@ import (
 	"github.com/go-http-utils/logger"
 )
 
-func ExampleLogger_DefaultHandler() {
+func Example_DefaultHandler() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
 		res.Write([]byte("Hello World"))
@@ -16,7 +16,7 @@ func ExampleLogger_DefaultHandler() {
 	http.ListenAndServe(":8080", logger.DefaultHandler(mux))
 }
 
-func ExampleLogger_Handler() {
+func Example_Handler() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
 		res.Write([]byte("Hello World"))

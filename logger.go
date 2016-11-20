@@ -15,7 +15,7 @@ type Type int
 
 const (
 	// Version is this package's version
-	Version = "0.1.0"
+	Version = "0.2.0"
 
 	// CombineLoggerType is the standard Apache combined log output
 	//
@@ -70,15 +70,25 @@ func (rl *responseLogger) Write(bytes []byte) (int, error) {
 		rl.status = http.StatusOK
 	}
 
-	rl.size = rl.size + len(bytes)
+	size, err := rl.rw.Write(bytes)
 
-	return rl.rw.Write(bytes)
+	rl.size += size
+
+	return size, err
 }
 
 func (rl *responseLogger) WriteHeader(status int) {
 	rl.status = status
 
 	rl.rw.WriteHeader(status)
+}
+
+func (rl *responseLogger) Flush() {
+	f, ok := rl.rw.(http.Flusher)
+
+	if ok {
+		f.Flush()
+	}
 }
 
 type loggerHanlder struct {

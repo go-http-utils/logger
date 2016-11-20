@@ -99,7 +99,7 @@ func (trw testResponseWriter) Header() http.Header {
 }
 
 func (trw testResponseWriter) Write(bytes []byte) (int, error) {
-	return 0, nil
+	return len(bytes), nil
 }
 
 func (trw testResponseWriter) WriteHeader(status int) {}
