@@ -14,7 +14,8 @@ import (
 type Type int
 
 const (
-	timeFormat = "02/Jan/2006:15:04:05 -0700"
+	// Version is this package's version
+	Version = "0.1.0"
 
 	// CombineLoggerType is the standard Apache combined log output
 	//
@@ -36,7 +37,7 @@ const (
 	//
 	// :method :url :status :response-time ms - :res[content-length]
 	DevLoggerType
-	// ShortLoggerType is shorter than default, also including response time
+	// ShortLoggerType is shorter than common, including response time
 	//
 	// format:
 	//
@@ -49,6 +50,8 @@ const (
 	//
 	// :method :url :status :res[content-length] - :response-time ms
 	TinyLoggerType
+
+	timeFormat = "02/Jan/2006:15:04:05 -0700"
 )
 
 type responseLogger struct {
@@ -89,10 +92,10 @@ func (rh loggerHanlder) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	rh.h.ServeHTTP(rl, req)
 
-	rh.write(rh.formatType, rl, req)
+	go rh.write(rl, req)
 }
 
-func (rh loggerHanlder) write(t Type, rl *responseLogger, req *http.Request) {
+func (rh loggerHanlder) write(rl *responseLogger, req *http.Request) {
 	username := "-"
 
 	if req.URL.User != nil {
@@ -101,7 +104,7 @@ func (rh loggerHanlder) write(t Type, rl *responseLogger, req *http.Request) {
 		}
 	}
 
-	switch t {
+	switch rh.formatType {
 	case CombineLoggerType:
 		fmt.Fprintln(rh.writer, strings.Join([]string{
 			req.RemoteAddr,
@@ -165,12 +168,22 @@ func parseResponseTime(start time.Time) string {
 	return fmt.Sprintf("%.3f ms", time.Now().Sub(start).Seconds()/1e6)
 }
 
-// Handler returns a http.Handler that wraps h by using
+// DefaultHandler returns a http.Handler that wraps h by using
 // Apache combined log output and print to os.Stdout
-func Handler(h http.Handler) http.Handler {
+func DefaultHandler(h http.Handler) http.Handler {
 	return loggerHanlder{
 		h:          h,
 		formatType: CombineLoggerType,
 		writer:     os.Stdout,
+	}
+}
+
+// Handler returns a http.Hanlder that wraps h by using t type log output
+// and print to writer
+func Handler(writer io.Writer, t Type, h http.Handler) http.Handler {
+	return loggerHanlder{
+		h:          h,
+		formatType: t,
+		writer:     writer,
 	}
 }
