@@ -27,6 +27,28 @@ func (s *LoggerSuite) SetupTest() {
 	s.rl.Write([]byte("test-logger"))
 }
 
+func (s *LoggerSuite) TestRW() {
+	s.Equal(s.rl.Header(), s.rl.rw.Header())
+
+	s.rl.WriteHeader(http.StatusAccepted)
+	s.Equal(s.rl.status, http.StatusAccepted)
+}
+
+func (s *LoggerSuite) TestDefaultHanlder() {
+	dh := DefaultHandler(http.NotFoundHandler())
+
+	dh.ServeHTTP(s.rl, s.req)
+}
+
+func (s *LoggerSuite) TestHanlder() {
+	tw := testWriter{}
+	dh := Handler(&tw, TinyLoggerType, http.NotFoundHandler())
+
+	dh.ServeHTTP(s.rl, s.req)
+
+	s.Equal("GET / 404 19 - 0.000 ms\n", string(tw.Bytes))
+}
+
 func (s *LoggerSuite) TestTiny() {
 	lh := loggerHanlder{
 		h:          http.NotFoundHandler(),

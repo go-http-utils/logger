@@ -102,7 +102,7 @@ func (rh loggerHanlder) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	rh.h.ServeHTTP(rl, req)
 
-	go rh.write(rl, req)
+	rh.write(rl, req)
 }
 
 func (rh loggerHanlder) write(rl *responseLogger, req *http.Request) {
