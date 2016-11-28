@@ -19,7 +19,7 @@ https://godoc.org/github.com/go-http-utils/logger
 ```go
 import (
   "net/http"
-	"os"
+  "os"
 
   "github.com/go-http-utils/logger"
 )
@@ -29,7 +29,7 @@ mux.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
   res.Write([]byte("Hello World"))
 })
 
-http.ListenAndServe(":8080", logger.Handler(os.Stdout, logger.DevLoggerType, mux))
+http.ListenAndServe(":8080", logger.Handler(mux, os.Stdout, logger.DevLoggerType))
 ```
 
 ## Supportted log output format

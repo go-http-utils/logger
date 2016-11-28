@@ -12,6 +12,6 @@
 //   res.Write([]byte("Hello World"))
 // })
 //
-// http.ListenAndServe(":8080", logger.Handler(os.Stdout, logger.DevLoggerType, mux))
+// http.ListenAndServe(":8080", logger.Handler(mux, os.Stdout, logger.DevLoggerType))
 
 package logger

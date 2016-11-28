@@ -15,7 +15,7 @@ type Type int
 
 const (
 	// Version is this package's version
-	Version = "0.2.0"
+	Version = "0.3.0"
 
 	// CombineLoggerType is the standard Apache combined log output
 	//
@@ -190,7 +190,7 @@ func DefaultHandler(h http.Handler) http.Handler {
 
 // Handler returns a http.Hanlder that wraps h by using t type log output
 // and print to writer
-func Handler(writer io.Writer, t Type, h http.Handler) http.Handler {
+func Handler(h http.Handler, writer io.Writer, t Type) http.Handler {
 	return loggerHanlder{
 		h:          h,
 		formatType: t,

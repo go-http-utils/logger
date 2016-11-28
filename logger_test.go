@@ -42,7 +42,7 @@ func (s *LoggerSuite) TestDefaultHanlder() {
 
 func (s *LoggerSuite) TestHanlder() {
 	tw := testWriter{}
-	dh := Handler(&tw, TinyLoggerType, http.NotFoundHandler())
+	dh := Handler(http.NotFoundHandler(), &tw, TinyLoggerType)
 
 	dh.ServeHTTP(s.rl, s.req)
 
