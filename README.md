@@ -32,7 +32,7 @@ mux.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
 http.ListenAndServe(":8080", logger.Handler(mux, os.Stdout, logger.DevLoggerType))
 ```
 
-## Supportted log output format
+## Supported log output format
 
 ### CombineLoggerType
 
