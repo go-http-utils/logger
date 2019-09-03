@@ -175,7 +175,7 @@ func (rh loggerHanlder) write(rl *responseLogger, req *http.Request) {
 }
 
 func parseResponseTime(start time.Time) string {
-	return fmt.Sprintf("%.3f ms", time.Now().Sub(start).Seconds()/1e6)
+	return fmt.Sprintf("%.3f ms", time.Now().Sub(start).Seconds()*1e3)
 }
 
 // DefaultHandler returns a http.Handler that wraps h by using
